@@ -3,6 +3,16 @@ description: |-
 
 units: {length: cm, time: s, quantity: mol, activation-energy: cal/mol}
 
+elements:
+- symbol: O
+  atomic-weight: 15.9994
+- symbol: H
+  atomic-weight: 1.00794
+- symbol: C
+  atomic-weight: 12.011
+- symbol: N
+  atomic-weight: 14.0067
+
 phases:
 - name: gas
   thermo: ideal-gas
