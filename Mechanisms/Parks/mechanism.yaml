@@ -1,0 +1,110 @@
+description: |-
+  This mechanism is based on Park (1993) air plasma chemistry model which is mentioned in Tatar et al. (2024). NASA7 values taken from
+  NASA database, Gupta et al. (1990). Transport taken from air.yaml in Cantera.
+
+units: {length: cm, time: s, quantity: mol, activation-energy: cal/mol}
+
+elements:
+- symbol: O
+  atomic-weight: 15.9994
+- symbol: N
+  atomic-weight: 14.0067
+
+phases:
+- name: gas
+  thermo: ideal-gas
+  elements: [O, N]
+  species: [O2, N2, NO, N, O]
+  kinetics: gas
+  state: {T: 300.0, P: 1 atm}
+
+species:
+- name: O2
+  composition: {O: 2}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 6000.0]
+    data:
+    - [0.36146e+01, -0.18598e-02, 0.70814e-05, -0.68070e-08, 0.21628e-11, -0.10440e+04, 0.43628e+01]
+    - [0.35949e+01, 0.75213e-03, -0.18732e-06, 0.27913e-10, -0.15774e-14, -0.10440e+04, 0.38353e+01]
+  transport:
+    model: gas
+    geometry: linear
+    well-depth: 107.4
+    diameter: 3.458
+    polarizability: 1.6
+    rotational-relaxation: 3.8
+- name: N2
+  composition: {N: 2}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 6000.0]
+    data:
+    - [0.36748e+01, -0.12081e-02, 0.23240e-05, -0.63218e-09, -0.22577e-12, -0.10430e+04, 0.23580e+01]
+    - [0.32125e+01, 0.10137e-02, -0.30467e-06, 0.41091e-10, -0.20170e-14, -0.10430e+04, 0.43661e+01]
+  transport:
+    model: gas
+    geometry: linear
+    well-depth: 97.53
+    diameter: 3.621
+    polarizability: 1.76
+    rotational-relaxation: 4.0
+- name: NO
+  composition: {N: 1, O: 1}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 6000.0]
+    data:
+    - [0.35887e+01, -0.12479e-02, 0.39786e-05, -0.28651e-08, 0.63015e-12, 0.97640e+04, 0.51497e+01]
+    - [0.32047e+01, 0.12705e-02, -0.46603e-06, 0.75007e-10, -0.42314e-14, 0.97640e+04, 0.66867e+01]
+  transport:
+    model: gas
+    geometry: linear
+    well-depth: 97.53
+    diameter: 3.621
+    polarizability: 1.76
+    rotational-relaxation: 4.0
+- name: N
+  composition: {N: 1}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 6000.0]
+    data:
+    - [0.25031e+01, -0.21800e-04, 0.54205e-07, -0.56476e-10, 0.20999e-13, 0.56130e+05, 0.41676e+01]
+    - [0.24820e+01, 0.69258e-04, -0.63065e-07, 0.18387e-10, -0.11747e-14, 0.56130e+05, 0.42618e+01]
+  transport:
+    model: gas
+    geometry: atom
+    well-depth: 71.4
+    diameter: 3.298
+- name: O
+  composition: {O: 1}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 6000.0]
+    data:
+    - [0.28236e+01, -0.89478e-03, 0.83060e-06, -0.16837e-09, -0.73205e-13, 0.29150e+05, 0.35027e+01]
+    - [0.25421e+01, -0.27551e-04, -0.31028e-08, 0.45511e-11, -0.43681e-15, 0.29150e+05, 0.49203e+01]
+  transport:
+    model: gas
+    geometry: atom
+    well-depth: 80.0
+    diameter: 2.75
+
+reactions:
+- equation: N2 + M <=> 2 N + M              # Reaction 1
+  type: three-body
+  rate-constant: {A: 7.0e+21, b: -1.6, Ea: 224951}
+  efficiencies: {N: 4.2857, O: 4.2857}
+- equation: O2 + M <=> 2 O + M              # Reaction 2
+  type: three-body
+  rate-constant: {A: 2.0e+21, b: -1.5, Ea: 118238}
+  efficiencies: {N: 5.0, O: 5.0}
+- equation: NO + M <=> N + O + M            # Reaction 3
+  type: three-body
+  rate-constant: {A: 5.0e+15, b: 0.0, Ea: 150034}
+  efficiencies: {N: 22.0, O: 22.0}
+- equation: N2 + O <=> NO + N               # Reaction 4
+  rate-constant: {A: 6.4e+17, b: -1.0, Ea: 76308}
+- equation: NO + O <=> O2 + N               # Reaction 5
+  rate-constant: {A: 8.4e+12, b: 0.0, Ea: 38651}
